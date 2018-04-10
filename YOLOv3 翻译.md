@@ -99,9 +99,12 @@ YOLOv3相当好！！看表 3 。在COCO数据集诡异的均值AP测量方法�
 **Focal loss**.我们试着用了focal loss。他让我们的$mAP$掉了2个点。YOLOv3可能在focal loss要解决的问题上已经足够鲁棒，因为YOLOv3将物体预测和条件类别预测分开了。因此在很多情况上类别预测没有带来loss？还是因为别的？我们还不能完全确定。
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
 
-<center>表3.我确实从[7]里盗了所有的表格，他们花了相相相相当长的时间白手起家做出来的。好吧，YOLOv3做得还不赖。给我记住RetinaNet可是花了3.8倍的时间处理一张图片。YOLOv3比SSD变体们还有$AP_{50}下的$state-of-the-art的模型们好太多了。</center><br>
 <center>
 ![](/Users/Tmono/Desktop/屏幕快照 2018-04-11 上午3.59.12.png)
+
+表3.我确实从[7]里盗了所有的表格，他们花了相相相相当长的时间白手起家做出来的。好吧，YOLOv3做得还不赖。给我记住RetinaNet可是花了3.8倍的时间处理一张图片。YOLOv3比SSD变体们还有$AP_{50}下的$state-of-the-art的模型们好太多了。</center><br>
+<center>
+![](/Users/Tmono/Desktop/屏幕快照 2018-04-11 上午4.49.37.png)
 <br>
 图3.还是从[7]里借鉴的，这次展示了在.5 IOU mAP上 speed/accuracy 的tradeoff。你可以分辨出YOLOv3很棒棒因为数值很高还有左得都要出去了。是否能引用自己的论文？猜猜谁要试试？这个家伙→[14]。
 </center><br>
