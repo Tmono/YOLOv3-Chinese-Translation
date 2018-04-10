@@ -52,12 +52,12 @@ $\hat{t}_*$
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 当我们迁移到更复杂的数据集，比如Open Image Dataset[5]，这个方法帮助了我们。在这个数据集中有很多相互重叠的标签（例如：女人和人）。利用softmax限制假设在每个框中正好有一个类别，通常并不符合情况。多标签方法能更好地模型化这类数据。
 ### 2.3. 多尺度预测
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; YOLOv3在3个不同的尺度上预测物体框。我们的系统用一个与特征金字塔网络[6]类似的概念从这些尺度上提取出特征。在基础特征提取器上我们添加了几个卷积层。最后几层预测一个三维张量来编码bounding box，有没有物体，和类别预测。以我们在COCO[8]上的经验，我们在每个尺度预测3个框，因此张量为$ N x N x [3*(4+1+80)] $，对应为4个bounding box的偏移，1为预测物体，还有80个类预测。<br>
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 下一步，我们取前两层的特征图升采样2倍。我们还取一个网络早期的特征图，并用元素加把它合并进我们的升采样特征里。这个方法让我们从升采样特征里得到更多含义丰富的语义信息，还有从早期特征图里得到更多细粒度信息。然后我们加多了几层卷积网络来处理这个合成的特征图，并最终预测一个相似的张量，虽然模型大小翻了一倍。<br>
+&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 下一步，我们取前两层的特征图升采样2倍。我们还取一个网络早期的特征图，并用元素加法把它合并进我们的升采样特征里。这个方法让我们从升采样特征里得到更多含义丰富的语义信息，还有从早期特征图里得到更多细粒度信息。然后我们加多了几层卷积网络来处理这个合成的特征图，并最终预测一个相似的张量，虽然模型大小翻了一倍。<br>
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 我们把同样的设计在最终尺寸预测框框上再执行了一遍。因此我们对第三尺度的预测得益于所有的prior计算和早期网络细粒度特征。<br>
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 我们还使用k-means聚类来决定我们的bounding box prior。我们只是随意地排序了选定的9个聚类和3个尺度，然后均分每个聚类到各个尺度上。在COCO数据集这9个聚类是：(10x13)，(16x30)，(33x23)，(30x61)，(62x45)，(59x119)，(116x90)，(156x198)，(373x326)。
 ### 2.4. 特征提取
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
-我们用一个新网络来做特征提取的工作。我们的新网络是YOLOv2，Darknet-19和时髦的残差网络这类东西的杂合体。我们的网络用了连续的3x3和1x1的卷积层，但是同时也有一些跨层连接，网络明显更大了。它有53层卷积，所以我们叫他....当当当当....Darknet-53!</br>
+我们用一个新网络来做特征提取的工作。我们的新网络是YOLOv2，Darknet-19和时髦的残差网络这类东西的杂糅。我们的网络用了连续的3x3和1x1的卷积层，但是同时也有一些跨层连接，网络明显更大了。它有53层卷积，所以我们叫他....当当当当....Darknet-53!</br>
 
 <center>
 ![](/Users/Tmono/Desktop/屏幕快照 2018-04-11 上午3.51.46.png)
@@ -113,7 +113,7 @@ YOLOv3相当好！！看表 3 。在COCO数据集诡异的均值AP测量方法�
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
 YOLOv3是个很棒棒的检测器。又快又精确。它在COCO的0.5和0.95 IOU之间的平均AP上不太好。但是它在0.5 IOU的老检测评估方法上非常棒啊。<br>
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
-话说回来我们为什么换了评测方法呢？原始的COCO论文含有这样的蜜汁句子：“A full discussion of evaluation metrics will be added once the evaluation server is complete（一个经充分讨论的评估标准会在评估服务完成的时候被加进去）”。Russakovsky等人报告过人类分辨从0.5到0.3的IOU也很困难！“Training humans to visually inspect a bounding box with IOU of 0.3 and distinguish it from one with IOU 0.5 is surprisingly difficult.(训练人类来视觉检索一个0.3 IOU的bounding box，并将它从0.5 IOU里区分出来，这出乎意料地困难。)”[16]如果人类都不能分辨有什么不同，那用哪个评价标准又有什么关系？<br>
+话说回来我们为什么换了评测方法呢？原始的COCO论文含有这样的蜜汁句子：“A full discussion of evaluation metrics will be added once the evaluation server is complete（一个经充分讨论的评估标准会在评估服务完成的时候被加进去）”。Russakovsky等人报告过人类从0.5里分辨0.3的IOU也很困难！“Training humans to visually inspect a bounding box with IOU of 0.3 and distinguish it from one with IOU 0.5 is surprisingly difficult.(训练人类来视觉检索一个0.3 IOU的bounding box，并将它从0.5 IOU里区分出来，这出乎意料地困难。)”[16]如果人类都不能分辨有什么不同，那用哪个评价标准又有什么关系？<br>
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
 但可能更好的问题是：“我们现在有了这些检测器，我们要拿来干嘛？”很多人在Google和Facebook做这些研究。我想至少我们还知道这些技术在好人手里，还有绝对不会被用于收割人们的个人信息还有把它卖给....等等，你说这正是它的用处？噢😯。<br>
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
